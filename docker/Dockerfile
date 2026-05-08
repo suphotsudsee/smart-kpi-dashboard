@@ -9,7 +9,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV DATABASE_URL=file:./prisma/dev.db
 RUN npx prisma generate
-RUN npx prisma db push --skip-generate --accept-data-loss
+RUN npx prisma migrate deploy
 RUN npx tsx prisma/seed.ts
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
@@ -33,6 +33,7 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/tsx ./node_modules/tsx
+COPY --from=builder /app/node_modules/@libsql ./node_modules/@libsql
 
 # Copy the seeded database
 COPY --from=builder /app/prisma/dev.db /data/smart-kpi.db
