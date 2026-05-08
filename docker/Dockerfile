@@ -7,7 +7,11 @@ FROM node:20-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Prisma generate needs DATABASE_URL set (even though it doesn't connect)
+ENV DATABASE_URL=mysql://dummy:dummy@localhost:3306/dummy
 RUN npx prisma generate
+
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
