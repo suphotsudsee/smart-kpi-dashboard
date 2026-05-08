@@ -1,44 +1,24 @@
 services:
-  mariadb:
-    image: mariadb:10.11
-    restart: unless-stopped
-    environment:
-      MARIADB_ROOT_PASSWORD: KpiDashboard@2026
-      MARIADB_DATABASE: smart_kpi
-      MARIADB_USER: kpi_user
-      MARIADB_PASSWORD: kpi_pass_2026
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-pKpiDashboard@2026"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    networks:
-      - coolify
-
   app:
     build:
       context: .
       dockerfile: docker/Dockerfile
     restart: unless-stopped
-    depends_on:
-      mariadb:
-        condition: service_healthy
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - PORT=4445
       - HOSTNAME=0.0.0.0
-      - DATABASE_URL=mysql://kpi_user:kpi_pass_2026@mariadb:3306/smart_kpi
+      - DATABASE_URL=file:/data/smart-kpi.db
     ports:
       - "4445:4445"
+    volumes:
+      - app_data:/data
     networks:
       - coolify
 
 volumes:
-  mariadb_data:
+  app_data:
 
 networks:
   coolify:

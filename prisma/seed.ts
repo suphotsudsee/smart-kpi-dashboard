@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaLibSql({ url: 'file:./prisma/dev.db' })
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   // Clear existing data
