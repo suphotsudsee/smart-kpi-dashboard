@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Strategy {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique // e.g. "1", "2"
+  name        String    // e.g. "ระบบบริการดี"
+  description String    // e.g. "เพิ่มประสิทธิภาพระบบบริการเชิงพื้นที่ลดความเหลื่อมล้ำ"
+  order       Int       @default(0)
+  clusters    Cluster[]
+  kpis        Kpi[]
+}
+
+model Cluster {
+  id          Int       @id @default(autoincrement())
+  code        String    // e.g. "1.1"
+  name        String    // e.g. "โครงการ 30 บาทรักษาทุกที่ ฟอกไตฟรีได้ทุกแห่ง"
+  strategyId  Int
+  strategy    Strategy  @relation(fields: [strategyId], references: [id])
+  order       Int       @default(0)
+  kpis        Kpi[]
+}
+
+model Dimension {
+  id    Int    @id @default(autoincrement())
+  name  String // e.g. "มิติที่ 1: Service Plan"
+  order Int    @default(0)
+  kpis  Kpi[]
+}
+
+model Kpi {
+  id            Int        @id @default(autoincrement())
+  order         Int        @default(0) // e.g. 1, 2, 3
+  name          String     // Full KPI name
+  shortName     String?    // Short name
+  strategyId    Int
+  strategy      Strategy   @relation(fields: [strategyId], references: [id])
+  clusterId     Int?
+  cluster       Cluster?   @relation(fields: [clusterId], references: [id])
+  dimensionId   Int?
+  dimension     Dimension? @relation(fields: [dimensionId], references: [id])
+  dataSource    String     @default("HDC") // HDC, Other, Manual
+  targetPercent Float      @default(100)  // Target percentage
+  hdcUrl        String?    // URL to HDC report
+  customUrl     String?    // Custom report URL
+  scores        KpiScore[]
+  hospScores    HospKpiScore[]
+}
+
+model KpiScore {
+  id          Int      @id @default(autoincrement())
+  kpiId       Int
+  kpi         Kpi      @relation(fields: [kpiId], references: [id])
+  fiscalYear  Int      // 2565, 2566, 2567, 2568, 2569
+  valueA      Float    @default(0)  // Numerator
+  valueB      Float    @default(0)  // Denominator
+  percent     Float    @default(0)  // Achievement %
+  score       Float    @default(0)  // 1-5 score
+  status      String   @default("pending") // pass, fail, no_data, pending
+  updatedAt   DateTime @default(now())
+
+  @@unique([kpiId, fiscalYear])
+}
+
+model Hospital {
+  id      Int           @id @default(autoincrement())
+  code    String        @unique // Hospital code
+  name    String        // Hospital name
+  type    String        @default("รพ.ชุมชน") // รพ.ชุมชน, รพ.ทั่วไป, etc
+  scores  HospKpiScore[]
+}
+
+model HospKpiScore {
+  id         Int      @id @default(autoincrement())
+  hospitalId Int
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+  kpiId      Int
+  kpi        Kpi      @relation(fields: [kpiId], references: [id])
+  fiscalYear Int
+  valueA     Float    @default(0)
+  valueB     Float    @default(0)
+  percent    Float    @default(0)
+  score      Float    @default(0)
+  status     String   @default("pending")
+  updatedAt  DateTime @default(now())
+
+  @@unique([hospitalId, kpiId, fiscalYear])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String   // hashed
+  fullName  String
+  role      String   @default("viewer") // admin, editor, viewer
+  createdAt DateTime @default(now())
+}
