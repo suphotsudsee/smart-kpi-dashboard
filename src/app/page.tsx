@@ -1,11 +1,13 @@
+import { Suspense } from 'react';
 import { getKpisWithScores, getDashboardStats, getDimensionScores } from '@/lib/data';
 import PageWrapper from '@/components/PageWrapper';
 import StatCard from '@/components/StatCard';
 import ProgressBar from '@/components/ProgressBar';
 import StatusBadge from '@/components/StatusBadge';
 import Link from 'next/link';
-import { CheckCircle, XCircle, AlertTriangle, Database, ChevronRight } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, ChevronRight } from 'lucide-react';
 import DashboardRadarChart from '@/components/DashboardRadarChart';
+import DashboardHeader from '@/components/DashboardHeader';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,22 +27,9 @@ export default async function HomePage() {
   return (
     <PageWrapper>
       {/* Header Banner */}
-      <div className="bg-gradient-to-br from-blue-900 to-blue-600 text-white py-10 rounded-b-[30px]">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Database size={28} />
-            <h2 className="text-2xl font-bold">Dashboard สรุปตัวชี้วัด</h2>
-          </div>
-          <p className="text-blue-200 text-sm">อัปเดตล่าสุด: 07/05/2569 12:08 น.</p>
-          
-          {/* Year Selector */}
-          <select className="mt-3 bg-white/10 border border-white/20 text-white rounded-lg px-4 py-2 text-sm">
-            {[2569, 2568, 2567, 2566, 2565].map((y) => (
-              <option key={y} value={y} className="text-gray-900">ปีงบประมาณ {y}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+        <Suspense fallback={<div className="bg-gradient-to-br from-blue-900 to-blue-600 text-white py-10 rounded-b-[30px]" />}>
+          <DashboardHeader />
+        </Suspense>
 
       <div className="max-w-7xl mx-auto px-4 -mt-6">
         {/* Stats Cards */}
