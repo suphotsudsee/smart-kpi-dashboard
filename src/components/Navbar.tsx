@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation';
 import { Home, BarChart3, Gauge, PieChart, LogIn } from 'lucide-react';
 
 const navItems = [
-  { href: '/', label: 'หน้าแรก', icon: Home },
-  { href: '/kpi-matrix', label: 'เปรียบเทียบภาพรวม', icon: BarChart3 },
-  { href: '/kpi-comparison', label: 'เปรียบเทียบรายตัว', icon: Gauge },
-  { href: '/hospital-summary', label: 'สรุปรายหน่วยบริการ', icon: PieChart },
+  { href: '/', label: 'แดชบอร์ด', icon: Home },
+  { href: '/kpi-matrix', label: 'ตาราง KPI', icon: BarChart3 },
+  { href: '/kpi-comparison', label: 'เปรียบเทียบ KPI', icon: Gauge },
+  { href: '/hospital-summary', label: 'สรุปโรงพยาบาล', icon: PieChart },
 ];
 
 export default function Navbar() {
