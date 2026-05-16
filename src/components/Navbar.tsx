@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, BarChart3, Gauge, PieChart, LogIn, Menu, X } from 'lucide-react';
+import { Home, BarChart3, Gauge, PieChart, LogIn, Menu, X, MapPin, FileText, Users } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'แดชบอร์ด', icon: Home },
   { href: '/kpi-matrix', label: 'ตาราง KPI', icon: BarChart3 },
   { href: '/kpi-comparison', label: 'เปรียบเทียบ KPI', icon: Gauge },
   { href: '/hospital-summary', label: 'สรุปโรงพยาบาล', icon: PieChart },
+  { href: '/nachaluai', label: 'นาจะหลวย', icon: MapPin },
+  { href: '/hdc-reports', label: 'รายงาน HDC', icon: FileText },
+  { href: '/opd-instype', label: 'OPD สิทธิ์', icon: Users },
 ];
 
 export default function Navbar() {
