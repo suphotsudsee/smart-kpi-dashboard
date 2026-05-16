@@ -144,7 +144,7 @@ export async function getOpdByInstype(b_year: number = 2569): Promise<{
   data: { instype: string; label: string; count: number }[];
   total_visits: number;
 }> {
-  const result = await fetchMophReport({ table_name: "s_op_instype_all", b_year });
+  const result = await fetchMophReport({ tableName: "s_op_instype_all", year: b_year });
 
   if (!result.success || !result.data.length) {
     return { success: false, data: [], total_visits: 0 };
@@ -183,8 +183,8 @@ export async function getOpdByInstype(b_year: number = 2569): Promise<{
  */
 export async function getHospitalOpd(hospcode: string, b_year: number = 2569) {
   const result = await fetchMophReport({
-    table_name: "s_op_instype_all",
-    b_year,
+    tableName: "s_op_instype_all",
+    year: b_year,
     hospcode,
   });
 
