@@ -5,7 +5,7 @@ import StatCard from '@/components/StatCard';
 import ProgressBar from '@/components/ProgressBar';
 import StatusBadge from '@/components/StatusBadge';
 import Link from 'next/link';
-import { CheckCircle, XCircle, AlertTriangle, ChevronRight } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, Database, ChevronRight } from 'lucide-react';
 import DashboardRadarChart from '@/components/DashboardRadarChart';
 import DashboardHeader from '@/components/DashboardHeader';
 
